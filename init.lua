@@ -64,17 +64,6 @@ require("lazy").setup({
 		end,
 	},
 
-	-- Auto-close brackets/parens and smart Enter inside them
-	{
-		"windwp/nvim-autopairs",
-		event = "InsertEnter",
-		config = function()
-			require("nvim-autopairs").setup({
-				check_ts = true, -- use treesitter to be smarter about context
-			})
-		end,
-	},
-
 	-- Mason: installs LSP servers automatically
 	{
 		"williamboman/mason.nvim",
@@ -95,11 +84,11 @@ require("lazy").setup({
 
 	-- The actual LSP config
 	{
-		"neovim/nvim-lspconfig",
-		config = function()
+	    "neovim/nvim-lspconfig",
+	    config = function()
 		vim.lsp.config('clangd', {})
 		vim.lsp.enable('clangd')
-		end,
+	    end,
 	},
 })
 
@@ -180,6 +169,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "c", "cpp" },
 	callback = function()
 		SetTab(8)
+		vim.opt_local.expandtab = true
 		vim.opt_local.colorcolumn = "80"
 		vim.opt_local.formatprg = "clang-format"
 	end,
