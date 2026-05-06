@@ -25,6 +25,7 @@ require("lazy").setup({
 		lazy = false,
 		priority = 1000,
 		config = function()
+			vim.g.gruvbox_contrast_dark = "hard"
 			vim.cmd("colorscheme gruvbox")
 		end,
 	},
@@ -83,10 +84,11 @@ require("lazy").setup({
 
 	-- The actual LSP config
 	{
-		"neovim/nvim-lspconfig",
-		config = function()
-		require("lspconfig").clangd.setup({})
-		end,
+	    "neovim/nvim-lspconfig",
+	    config = function()
+		vim.lsp.config('clangd', {})
+		vim.lsp.enable('clangd')
+	    end,
 	},
 })
 
