@@ -62,6 +62,32 @@ require("lazy").setup({
 			require("gitsigns").setup()
 		end,
 	},
+
+	-- Mason: installs LSP servers automatically
+	{
+		"williamboman/mason.nvim",
+		config = function()
+		require("mason").setup()
+		end,
+	},
+
+	-- Bridges mason and lspconfig
+	{
+		"williamboman/mason-lspconfig.nvim",
+		config = function()
+		require("mason-lspconfig").setup({
+			ensure_installed = { "clangd" },
+		})
+		end,
+	},
+
+	-- The actual LSP config
+	{
+		"neovim/nvim-lspconfig",
+		config = function()
+		require("lspconfig").clangd.setup({})
+		end,
+	},
 })
 
 -- ========================
@@ -138,12 +164,12 @@ function _G.SetTab(width)
 end
 
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "c", "cpp" },
-    callback = function()
-        SetTab(8)
-        vim.opt_local.colorcolumn = "80"
-        vim.opt_local.formatprg = "clang-format"
-    end,
+	pattern = { "c", "cpp" },
+	callback = function()
+		SetTab(8)
+		vim.opt_local.colorcolumn = "80"
+		vim.opt_local.formatprg = "clang-format"
+	end,
 })
 
 -- ========================
