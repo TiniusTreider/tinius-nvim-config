@@ -145,8 +145,8 @@ vim.keymap.set({ "n", "v" }, "<leader>p", '"+p')
 -- ========================
 -- fzf keybinds
 -- ========================
-vim.keymap.set("n", "<C-p>", ":Files<CR>")
-vim.keymap.set("n", "<C-g>", ":Rg<CR>")
+vim.keymap.set("n", "<C-p>", ":fs<CR>")
+vim.keymap.set("n", "<C-g>", ":rg<CR>")
 
 -- ========================
 -- Ctrl + hjkl movement in insert mode
