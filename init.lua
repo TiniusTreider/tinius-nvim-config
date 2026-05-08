@@ -90,6 +90,16 @@ require("lazy").setup({
 		vim.lsp.enable('clangd')
 	    end,
 	},
+
+	{
+	    "windwp/nvim-autopairs",
+	    event = "InsertEnter",
+	    config = function()
+		require("nvim-autopairs").setup({
+		    check_ts = true,
+		})
+	    end,
+	},
 })
 
 -- ========================
@@ -154,7 +164,7 @@ vim.keymap.set("n", "<C-g>", ":rg<CR>")
 vim.keymap.set("i", "<C-h>", "<C-o>h")
 vim.keymap.set("i", "<C-j>", "<C-o>j")
 vim.keymap.set("i", "<C-k>", "<C-o>k")
-vim.keymap.set("i", "<C-l>", "<C-o>l")
+vim.keymap.set("i", "<C-l>", "<Esc>la")
 
 -- ========================
 -- indentation helper
