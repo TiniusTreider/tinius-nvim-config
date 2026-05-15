@@ -16,6 +16,8 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+vim.g.mapleader = " "
+
 -- ========================
 -- plugins
 -- ========================
@@ -47,13 +49,13 @@ require("lazy").setup({
 		build = ":TSUpdate",
 		lazy = false,
 		config = function()
-		pcall(function()
-			require("nvim-treesitter.configs").setup({
-			ensure_installed = { "c", "cpp", "lua", "vim", "bash" },
-			highlight = { enable = true },
-			indent = { enable = true },
-			})
-		end)
+			pcall(function()
+				require("nvim-treesitter.configs").setup({
+					ensure_installed = { "c", "cpp", "lua", "vim", "bash" },
+					highlight = { enable = true },
+					indent = { enable = true },
+				})
+			end)
 		end,
 	},
 
@@ -68,7 +70,7 @@ require("lazy").setup({
 	{
 		"williamboman/mason.nvim",
 		config = function()
-		require("mason").setup()
+			require("mason").setup()
 		end,
 	},
 
@@ -76,38 +78,39 @@ require("lazy").setup({
 	{
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
-		require("mason-lspconfig").setup({
-			ensure_installed = { "clangd" },
-		})
+			require("mason-lspconfig").setup({
+				ensure_installed = { "clangd" },
+			})
 		end,
 	},
 
-	-- The actual LSP config
+	-- The LSP config (Updated for Neovim 0.11+ / nvim-lspconfig v3 style)
 	{
-	    "neovim/nvim-lspconfig",
-	    config = function()
-		vim.lsp.config('clangd', {})
-		vim.lsp.enable('clangd')
-	    end,
+		"neovim/nvim-lspconfig",
+		config = function()
+			-- This is the new way to enable servers
+			vim.lsp.config("clangd", {})
+			vim.lsp.enable("clangd")
+		end,
 	},
 
 	{
-	    "windwp/nvim-autopairs",
-	    event = "InsertEnter",
-	    config = function()
-		require("nvim-autopairs").setup({
-		    check_ts = true,
-		})
-	    end,
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = function()
+			require("nvim-autopairs").setup({
+				check_ts = true,
+			})
+		end,
 	},
 })
 
 -- ========================
--- basic settings (legacy.vim)
+-- basic settings
 -- ========================
 vim.o.updatetime = 100
 vim.o.hidden = true
-vim.o.clipboard = "unnamedplus"
+vim.o.clipboard = "unnamedplus" -- Global clipboard sync
 
 vim.o.undofile = true
 vim.o.undodir = vim.fn.stdpath("cache") .. "/undo"
@@ -144,13 +147,9 @@ vim.o.cinoptions = "(0,Ws"
 vim.cmd("syntax on")
 
 -- ========================
--- clipboard fix (don't overwrite on paste)
+-- clipboard behavior
 -- ========================
 vim.keymap.set("x", "p", '"_dP')
-
-vim.keymap.set({ "n", "v" }, "<leader>y", '"+y')
-vim.keymap.set("n", "<leader>Y", '"+Y')
-vim.keymap.set({ "n", "v" }, "<leader>p", '"+p')
 
 -- ========================
 -- fzf keybinds
@@ -165,6 +164,13 @@ vim.keymap.set("i", "<C-h>", "<C-o>h")
 vim.keymap.set("i", "<C-j>", "<C-o>j")
 vim.keymap.set("i", "<C-k>", "<C-o>k")
 vim.keymap.set("i", "<C-l>", "<Esc>la")
+
+-- ========================
+-- Custom LSP Mappings
+-- ========================
+vim.keymap.set("n", "<leader>d", vim.lsp.buf.definition, { desc = "Go to Definition" })
+vim.keymap.set("n", "<leader>r", vim.lsp.buf.references, { desc = "Go to References" })
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.hover, { desc = "Hover Documentation" })
 
 -- ========================
 -- indentation helper
