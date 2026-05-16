@@ -23,83 +23,73 @@ vim.g.mapleader = " "
 -- ========================
 require("lazy").setup({
 	{
-		"morhetz/gruvbox",
+		"ellisonleao/gruvbox.nvim",
 		lazy = false,
 		priority = 1000,
 		config = function()
-			vim.g.gruvbox_contrast_dark = "hard"
+			require("gruvbox").setup({
+				terminal_colors = true,
+				undercurl = true,
+				underline = true,
+				bold = true,
+				italic = {
+					strings = true,
+					emphasis = true,
+					comments = true,
+					operators = false,
+					folds = true,
+				},
+				strikethrough = true,
+				invert_selection = false,
+				invert_signs = false,
+				invert_tabline = false,
+				invert_background = false,
+				contrast = "hard",
+				dim_inactive = false,
+				transparent_mode = false,
+			})
 			vim.cmd("colorscheme gruvbox")
 		end,
 	},
 
-	{
-		"junegunn/fzf",
-	},
-
-	{
-		"junegunn/fzf.vim",
-	},
-
-	{
-		"ntpeters/vim-better-whitespace",
-	},
+	{ "junegunn/fzf" },
+	{ "junegunn/fzf.vim" },
+	{ "ntpeters/vim-better-whitespace" },
 
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		lazy = false,
-		config = function()
-			pcall(function()
-				require("nvim-treesitter.configs").setup({
-					ensure_installed = { "c", "cpp", "lua", "vim", "bash" },
-					highlight = { enable = true },
-					indent = { enable = true },
-				})
-			end)
-		end,
+		opts = {
+			ensure_installed = { "c", "cpp", "lua", "vim", "bash" },
+			highlight = { enable = true },
+			indent = { enable = true },
+		},
 	},
 
 	{
 		"lewis6991/gitsigns.nvim",
-		config = function()
-			require("gitsigns").setup()
-		end,
+		config = true,
 	},
 
-	-- Mason: installs LSP servers automatically
 	{
 		"williamboman/mason.nvim",
-		config = function()
-			require("mason").setup()
-		end,
+		config = true,
+	-----
 	},
 
-	-- Bridges mason and lspconfig
 	{
 		"williamboman/mason-lspconfig.nvim",
-		config = function()
-			require("mason-lspconfig").setup({
-				ensure_installed = { "clangd" },
-			})
-		end,
+		opts = {
+			ensure_installed = { "clangd" },
+		},
 	},
 
-	-- The LSP config (Updated for Neovim 0.11+ / nvim-lspconfig v3 style)
+	-- Standard Neovim 0.11+ LSP Configuration
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			vim.lsp.config("clangd", {
-				cmd = {
-					"clangd",
-					"--background-index",
-					"--clang-tidy",
-					"--extra-arg=-std=c11",
-					"--query-driver=/usr/bin/gcc,/usr/bin/clang", 
-				},
-				init_options = {
-					fallbackFlags = { "-std=c11" },
-				},
-			})
+			-- Standard activation using default server settings
 			vim.lsp.enable("clangd")
 		end,
 	},
@@ -107,11 +97,7 @@ require("lazy").setup({
 	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
-		config = function()
-			require("nvim-autopairs").setup({
-				check_ts = true,
-			})
-		end,
+		config = true,
 	},
 })
 
@@ -119,8 +105,7 @@ require("lazy").setup({
 -- basic settings
 -- ========================
 vim.o.updatetime = 100
-vim.o.hidden = true
-vim.o.clipboard = "unnamedplus" -- Global clipboard sync
+vim.o.clipboard = "unnamedplus"
 
 vim.o.undofile = true
 vim.o.undodir = vim.fn.stdpath("cache") .. "/undo"
@@ -129,9 +114,7 @@ vim.o.autoread = true
 vim.o.foldlevelstart = 99
 
 vim.o.number = true
-vim.o.ruler = true
 vim.o.visualbell = true
-vim.o.encoding = "utf-8"
 
 vim.o.wrap = true
 vim.o.linebreak = true
@@ -142,8 +125,6 @@ vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.o.mouse = "a"
 
-vim.o.backup = false
-vim.o.writebackup = false
 vim.o.shortmess = vim.o.shortmess .. "c"
 vim.o.signcolumn = "yes"
 
@@ -181,7 +162,7 @@ vim.keymap.set("n", "<leader>r", vim.lsp.buf.references, { desc = "Go to Referen
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.hover, { desc = "Hover Documentation" })
 
 -- ========================
--- indentation helper
+-- language specific config
 -- ========================
 function _G.SetTab(width)
 	vim.bo.tabstop = width
@@ -198,12 +179,4 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.formatprg = "clang-format"
 	end,
 })
-
--- ========================
--- trailing whitespace highlight
--- ========================
-vim.cmd([[
-  highlight ExtraWhitespace ctermbg=red guibg=red
-  match ExtraWhitespace /\s\+$/
-]])
 
