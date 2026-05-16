@@ -144,7 +144,7 @@ vim.o.expandtab = false
 vim.o.autoindent = true
 vim.o.cinoptions = "(0,Ws"
 
-vim.cmd("syntax on")
+vim.cmd("syntax off")
 
 -- ========================
 -- clipboard behavior
