@@ -88,8 +88,18 @@ require("lazy").setup({
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			-- This is the new way to enable servers
-			vim.lsp.config("clangd", {})
+			vim.lsp.config("clangd", {
+				cmd = {
+					"clangd",
+					"--background-index",
+					"--clang-tidy",
+					"--extra-arg=-std=c11",
+					"--query-driver=/usr/bin/gcc,/usr/bin/clang", 
+				},
+				init_options = {
+					fallbackFlags = { "-std=c11" },
+				},
+			})
 			vim.lsp.enable("clangd")
 		end,
 	},
@@ -143,8 +153,6 @@ vim.o.laststatus = 2
 vim.o.expandtab = false
 vim.o.autoindent = true
 vim.o.cinoptions = "(0,Ws"
-
-vim.cmd("syntax off")
 
 -- ========================
 -- clipboard behavior
