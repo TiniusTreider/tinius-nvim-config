@@ -22,6 +22,7 @@ vim.g.mapleader = " "
 -- plugins
 -- ========================
 require("lazy").setup({
+
 	{
 		"ellisonleao/gruvbox.nvim",
 		lazy = false,
@@ -61,7 +62,13 @@ require("lazy").setup({
 		build = ":TSUpdate",
 		lazy = false,
 		opts = {
-			ensure_installed = { "c", "cpp", "lua", "vim", "bash" },
+			ensure_installed = {
+				"c",
+				"cpp",
+				"lua",
+				"vim",
+				"bash",
+			},
 			highlight = { enable = true },
 			indent = { enable = true },
 		},
@@ -75,22 +82,35 @@ require("lazy").setup({
 	{
 		"williamboman/mason.nvim",
 		config = true,
-	-----
 	},
 
 	{
 		"williamboman/mason-lspconfig.nvim",
 		opts = {
-			ensure_installed = { "clangd" },
+			ensure_installed = {
+				"clangd",
+			},
 		},
 	},
 
-	-- Standard Neovim 0.11+ LSP Configuration
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			-- Standard activation using default server settings
 			vim.lsp.enable("clangd")
+		end,
+	},
+
+	{
+		"vyfor/cord.nvim",
+		config = function()
+			require("cord").setup({
+				display = {
+					theme = "default",
+					flavor = "dark",
+					show_repository = true,
+					show_cursor_position = true,
+				},
+			})
 		end,
 	},
 
@@ -99,6 +119,7 @@ require("lazy").setup({
 		event = "InsertEnter",
 		config = true,
 	},
+
 })
 
 -- ========================
@@ -143,28 +164,36 @@ vim.keymap.set("x", "p", '"_dP')
 -- ========================
 -- fzf keybinds
 -- ========================
-vim.keymap.set("n", "<C-p>", ":fs<CR>")
-vim.keymap.set("n", "<C-g>", ":rg<CR>")
+vim.keymap.set("n", "<leader>fs", ":Files<CR>")
+vim.keymap.set("n", "<leader>rg", ":Rg<CR>")
 
 -- ========================
 -- Ctrl + hjkl movement in insert mode
 -- ========================
-vim.keymap.set("i", "<C-h>", "<C-o>h")
-vim.keymap.set("i", "<C-j>", "<C-o>j")
-vim.keymap.set("i", "<C-k>", "<C-o>k")
-vim.keymap.set("i", "<C-l>", "<Esc>la")
+vim.keymap.set("i", "<C-h>", "<Left>")
+vim.keymap.set("i", "<C-j>", "<Down>")
+vim.keymap.set("i", "<C-k>", "<Up>")
+vim.keymap.set("i", "<C-l>", "<Right>")
 
 -- ========================
--- Custom LSP Mappings
+-- Custom LSP mappings
 -- ========================
-vim.keymap.set("n", "<leader>d", vim.lsp.buf.definition, { desc = "Go to Definition" })
-vim.keymap.set("n", "<leader>r", vim.lsp.buf.references, { desc = "Go to References" })
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.hover, { desc = "Hover Documentation" })
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
+	desc = "Go to Definition",
+})
+
+vim.keymap.set("n", "gr", vim.lsp.buf.references, {
+	desc = "Go to References",
+})
+
+vim.keymap.set("n", "K", vim.lsp.buf.hover, {
+	desc = "Hover Documentation",
+})
 
 -- ========================
 -- language specific config
 -- ========================
-function _G.SetTab(width)
+function SetTab(width)
 	vim.bo.tabstop = width
 	vim.bo.shiftwidth = width
 	vim.bo.softtabstop = width
@@ -175,7 +204,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
 		SetTab(8)
 		vim.opt_local.expandtab = true
-		vim.opt_local.colorcolumn = "80"
+		vim.opt_local.colorcolumn = "100"
 		vim.opt_local.formatprg = "clang-format"
 	end,
 })
